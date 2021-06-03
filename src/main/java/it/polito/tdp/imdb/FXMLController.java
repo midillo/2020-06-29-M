@@ -5,8 +5,12 @@
 package it.polito.tdp.imdb;
 
 import java.net.URL;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.imdb.model.Director;
 import it.polito.tdp.imdb.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -35,10 +39,10 @@ public class FXMLController {
     private Button btnCercaAffini; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxAnno"
-    private ComboBox<?> boxAnno; // Value injected by FXMLLoader
+    private ComboBox<Year> boxAnno; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxRegista"
-    private ComboBox<?> boxRegista; // Value injected by FXMLLoader
+    private ComboBox<Director> boxRegista; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtAttoriCondivisi"
     private TextField txtAttoriCondivisi; // Value injected by FXMLLoader
@@ -48,7 +52,17 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    		txtResult.clear();
+    		Year anno = boxAnno.getValue();
+    		
+    		if(anno == null) {
+    			txtResult.appendText("Scegliere un anno.");
+    		}
+    		
+    		txtResult.appendText(model.creaGrafo(anno));
+    		
+    		boxRegista.getItems().addAll(model.getDirectors(anno));
+    	
     }
 
     @FXML
@@ -77,6 +91,9 @@ public class FXMLController {
     	
     	this.model = model;
     	
+    	for(int i=2004; i<2007; i++) {
+    		boxAnno.getItems().add(Year.of(i));
+    	}
     }
     
 }
